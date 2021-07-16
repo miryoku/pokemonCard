@@ -1,23 +1,40 @@
-//AppeleAsync("https://api.pokemontcg.io/v2/sets", AfficheSet)
-AppeleAsync("https://api.pokemontcg.io/v2/cards?q=set.id:base1", AfficheContenairSet)
+AppeleAsync("https://api.pokemontcg.io/v2/sets", AfficheSet)
+//AppeleAsync("https://api.pokemontcg.io/v2/cards?q=set.id:base1", AfficheContenairSet)
 //AppeleAsync("https://api.pokemontcg.io/v2/cards/xy7-54", AfficheDetailCard)
 //AppeleAsync("https://api.pokemontcg.io/v2/cards?q=name:charizard*", AfficheContenairSet)
 
-//AppeleAsync("https://api.pokemontcg.io/v2/cards?q=nationalPokedexNumbers:[4 to 6]", AfficheContenairSet)
+//AppeleAsync("https://api.pokemontcg.io/v2/cards?q=rarity:Rare.Shiny.GX types:dragon", AfficheContenairSet)
 
-
+AppeleAsync("https://api.pokemontcg.io/v2/rarities", ajoutForm)
 
 let search = document.getElementById("search");
 let clock;
+let valueRarelie;
 search.addEventListener("input", () => {
+
 	const time = 3000
 	clearTimeout(clock)
 	if (search.value.length != 0) {
-		clock = setTimeout(function () { AppeleAsync("https://api.pokemontcg.io/v2/cards?q=name:" + search.value + "*", AfficheSearche) }, time)
+		let url = "https://api.pokemontcg.io/v2/cards?q=name:" + search.value+"*";
+		if (valueRarelie !== undefined) { url += " rarity:" + valueRarelie; }
+		console.log(url)
+		clock = setTimeout(function () { AppeleAsync(url, AfficheSearche) }, time)
 	} else {
-		clock = setTimeout(function () {AppeleAsync("https://api.pokemontcg.io/v2/sets", AfficheSet) }, time)
-	 }
+		clock = setTimeout(function () { AppeleAsync("https://api.pokemontcg.io/v2/sets", AfficheSet) }, time)
+	}
 })
+
+let rareties = document.getElementById("rarelies");
+rareties.addEventListener("change", (e) => {
+
+	const time = 3000;
+	clearTimeout(clock)
+	valueRarelie = e.srcElement.value;
+	clock = setTimeout(function () { AppeleAsync("https://api.pokemontcg.io/v2/cards?q=name:" + search.value + "* rarity:" + valueRarelie, AfficheSearche) }, time)
+
+})
+
+
 
 function AfficheSearche(data) {
 	document.getElementById('container').innerHTML = ""
@@ -104,8 +121,9 @@ function AfficheDetailCard(data) {
 	pFlavorText = newElementText(pFlavorText, "Description : " + element.flavorText)
 	var pArtist = remplirNewElement("p", "card-text", false);
 	pArtist = newElementText(pArtist, "Artist: " + element.artist)
-	var pNationalPokedexNumbers = remplirNewElement("p", "card-text", false);
+	/*var pNationalPokedexNumbers = remplirNewElement("p", "card-text", false);
 	pNationalPokedexNumbers = newElementText(pNationalPokedexNumbers, "Number Pokedex: " + element.nationalPokedexNumbers[0])
+*/
 	var aTcgplayer = remplirNewElement("a", "btn btn-primary", false);
 	aTcgplayer = newElementText(aTcgplayer, "Site de vente")
 	aTcgplayer = newElementHref(aTcgplayer, element.tcgplayer.url, "_blank");
@@ -119,7 +137,7 @@ function AfficheDetailCard(data) {
 	divBody.appendChild(pSuperType);
 	divBody.appendChild(pFlavorText);
 	divBody.appendChild(pArtist);
-	divBody.appendChild(pNationalPokedexNumbers);
+	//divBody.appendChild(pNationalPokedexNumbers);
 	divBody.appendChild(aTcgplayer);
 	container.appendChild(div);
 }
@@ -226,6 +244,29 @@ function BarNav(...nav) {
 		}
 	}
 	container.appendChild(nav);
+}
+
+function newElementForm(newElement, type, name, element) {
+	newElement.type = type;
+	newElement.value = element.replaceAll(" ", '.');
+	newElement.name = name;
+	return newElement;
+}
+
+function ajoutForm(data) {
+	var form = document.getElementById("rarelies");
+	var row = remplirNewElement("div", "row", false);
+	data.data.forEach(element => {
+		var div = remplirNewElement("div", "form-check col-2", false);
+		var input = remplirNewElement("input", "form-check-input", false);
+		input = newElementForm(input, "radio", "rarity", element);
+		var label = remplirNewElement("label", "form-check-label", false);
+		label = newElementText(label, element)
+		row.appendChild(div)
+		div.appendChild(label);
+		div.appendChild(input);
+	})
+	form.appendChild(row)
 }
 
 function AppeleAsync(ressource, callback, data) {
