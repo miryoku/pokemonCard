@@ -17,7 +17,6 @@ search.addEventListener("input", () => {
 	if (search.value.length != 0) {
 		let url = "https://api.pokemontcg.io/v2/cards?q=name:" + search.value+"*";
 		if (valueRarelie !== undefined) { url += " rarity:" + valueRarelie; }
-		console.log(url)
 		clock = setTimeout(function () { AppeleAsync(url, AfficheSearche) }, time)
 	} else {
 		clock = setTimeout(function () { AppeleAsync("https://api.pokemontcg.io/v2/sets", AfficheSet) }, time)
@@ -75,7 +74,6 @@ function AfficheSet(data) {
 }
 
 function AfficheContenairSet(data) {
-	console.log(data)
 	document.getElementById('container').innerHTML = ""
 	var container = document.getElementById("container");
 	var row = document.createElement("div");
@@ -99,7 +97,6 @@ function AfficheDetailCard(data) {
 	document.getElementById('container').innerHTML = ""
 	var container = document.getElementById("container");
 	const element = data.data;
-	//console.log(data)
 
 
 	BarNav("https://api.pokemontcg.io/v2/sets", AfficheSet, "home", "https://api.pokemontcg.io/v2/cards?q=set.id:" + element.set.id, AfficheContenairSet, element.set.id, element.name)
@@ -282,7 +279,6 @@ function Async(xhr, callback) {
 	xhr.onreadystatechange = function () {
 
 		if (this.readyState == 4 && this.status == 200) {
-			//console.log(this.response);
 			var res = this.response;
 
 			if (res) {
