@@ -5,8 +5,10 @@ AppeleAsync("https://api.pokemontcg.io/v2/sets", AfficheSet)
 
 //AppeleAsync("https://api.pokemontcg.io/v2/cards?q=rarity:Rare.Shiny.GX types:dragon", AfficheContenairSet)
 
-AppeleAsync("https://api.pokemontcg.io/v2/rarities", ajoutForm)
+AppeleAsync("https://api.pokemontcg.io/v2/rarities", searchRarelies);
+AppeleAsync("https://api.pokemontcg.io/v2/types",searchTypes);
 
+let id;
 let search = document.getElementById("search");
 let clock;
 let valueRarelie;
@@ -33,6 +35,11 @@ rareties.addEventListener("change", (e) => {
 
 })
 
+/*
+let types= document.getElementById("types");
+types.addEventListener("change",(e)=>{
+	console.log(e.srcElement.value);
+})*/
 
 
 function AfficheSearche(data) {
@@ -250,8 +257,8 @@ function newElementForm(newElement, type, name, element) {
 	return newElement;
 }
 
-function ajoutForm(data) {
-	var form = document.getElementById("rarelies");
+function ajoutForm(data,id) {
+	var form = document.getElementById(id);
 	var row = remplirNewElement("div", "row", false);
 	data.data.forEach(element => {
 		var div = remplirNewElement("div", "form-check col-2", false);
@@ -266,7 +273,17 @@ function ajoutForm(data) {
 	form.appendChild(row)
 }
 
+function searchRarelies(data){
+	ajoutForm(data,"rarelies");
+}
+
+function searchTypes(data){
+	ajoutForm(data,"types");
+}
+
+
 function AppeleAsync(ressource, callback, data) {
+	
 	var xhr = new XMLHttpRequest();
 	Async(xhr, callback)
 	xhr.open("GET", ressource, true);
