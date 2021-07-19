@@ -6,19 +6,21 @@ AppeleAsync("https://api.pokemontcg.io/v2/sets", AfficheSet)
 //AppeleAsync("https://api.pokemontcg.io/v2/cards?q=rarity:Rare.Shiny.GX types:dragon", AfficheContenairSet)
 
 AppeleAsync("https://api.pokemontcg.io/v2/rarities", searchRarelies);
-AppeleAsync("https://api.pokemontcg.io/v2/types",searchTypes);
+AppeleAsync("https://api.pokemontcg.io/v2/types", searchTypes);
 
 let id;
 let search = document.getElementById("search");
 let clock;
 let valueRarelie;
+let valueTypes;
 search.addEventListener("input", () => {
 
 	const time = 3000
 	clearTimeout(clock)
 	if (search.value.length != 0) {
-		let url = "https://api.pokemontcg.io/v2/cards?q=name:" + search.value+"*";
+		let url = "https://api.pokemontcg.io/v2/cards?q=name:" + search.value + "*";
 		if (valueRarelie !== undefined) { url += " rarity:" + valueRarelie; }
+		if (valueTypes !== undefined) { url += " types:" + valueTypes; }
 		clock = setTimeout(function () { AppeleAsync(url, AfficheSearche) }, time)
 	} else {
 		clock = setTimeout(function () { AppeleAsync("https://api.pokemontcg.io/v2/sets", AfficheSet) }, time)
@@ -31,15 +33,26 @@ rareties.addEventListener("change", (e) => {
 	const time = 3000;
 	clearTimeout(clock)
 	valueRarelie = e.srcElement.value;
-	clock = setTimeout(function () { AppeleAsync("https://api.pokemontcg.io/v2/cards?q=name:" + search.value + "* rarity:" + valueRarelie, AfficheSearche) }, time)
-
+	let url = "https://api.pokemontcg.io/v2/cards?q=name:" + search.value + "*";
+	if (valueRarelie !== undefined) { url += " rarity:" + valueRarelie; }
+	if (valueTypes !== undefined) { url += " types:" + valueTypes; }
+	console.log(url)
+	clock = setTimeout(function () { AppeleAsync(url, AfficheSearche) }, time)
 })
 
-/*
-let types= document.getElementById("types");
-types.addEventListener("change",(e)=>{
-	console.log(e.srcElement.value);
-})*/
+
+let types = document.getElementById("types");
+types.addEventListener("change", (e) => {
+	
+	const time = 3000
+	clearTimeout(clock)
+	valueTypes = e.srcElement.value;
+	let url = "https://api.pokemontcg.io/v2/cards?q=name:" + search.value + "*";
+	if (valueRarelie !== undefined) { url += " rarity:" + valueRarelie; }
+	if (valueTypes !== undefined) { url += " types:" + valueTypes; }
+	console.log(url)
+	clock = setTimeout(function () { AppeleAsync(url, AfficheSearche) }, time)
+})
 
 
 function AfficheSearche(data) {
@@ -257,13 +270,13 @@ function newElementForm(newElement, type, name, element) {
 	return newElement;
 }
 
-function ajoutForm(data,id) {
+function ajoutForm(data, id) {
 	var form = document.getElementById(id);
 	var row = remplirNewElement("div", "row", false);
 	data.data.forEach(element => {
 		var div = remplirNewElement("div", "form-check col-2", false);
 		var input = remplirNewElement("input", "form-check-input", false);
-		input = newElementForm(input, "radio", "rarity", element);
+		input = newElementForm(input, "radio", id, element);
 		var label = remplirNewElement("label", "form-check-label", false);
 		label = newElementText(label, element)
 		row.appendChild(div)
@@ -273,17 +286,17 @@ function ajoutForm(data,id) {
 	form.appendChild(row)
 }
 
-function searchRarelies(data){
-	ajoutForm(data,"rarelies");
+function searchRarelies(data) {
+	ajoutForm(data, "rarelies");
 }
 
-function searchTypes(data){
-	ajoutForm(data,"types");
+function searchTypes(data) {
+	ajoutForm(data, "types");
 }
 
 
 function AppeleAsync(ressource, callback, data) {
-	
+
 	var xhr = new XMLHttpRequest();
 	Async(xhr, callback)
 	xhr.open("GET", ressource, true);
