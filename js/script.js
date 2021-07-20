@@ -40,7 +40,7 @@ rareties.addEventListener("change", (e) => {
 	if (valueRarelie !== undefined) { url += " rarity:" + valueRarelie; }
 	if (valueTypes !== undefined) { url += " types:" + valueTypes; }
 	console.log(url)
-	clock = setTimeout(function () { AppeleAsync(url, AfficheSearche) }, time)
+	clock = setTimeout(function () { AppeleAsync(url, AfficheSearche);rareties.checked = false; }, time)
 })
 
 
@@ -57,6 +57,11 @@ types.addEventListener("change", (e) => {
 	clock = setTimeout(function () { AppeleAsync(url, AfficheSearche) }, time)
 })
 
+let reset = document.getElementById("reset");
+reset.addEventListener('click',()=>{
+	clearTimeout(clock)
+	disableLoad()
+})
 
 function AfficheSearche(data) {
 	disableLoad();
@@ -332,6 +337,7 @@ function Async(xhr, callback) {
 	};
 }
 
+
 function activeLoad(){
 	var loader=document.getElementById("loader");
 	loader.style.display="block";
@@ -343,3 +349,4 @@ function disableLoad(){
 	loader.style.display="none";
 
 }
+
