@@ -1,7 +1,7 @@
-/*AppeleAsync("https://api.pokemontcg.io/v2/sets", AfficheSet)
+AppeleAsync("https://api.pokemontcg.io/v2/sets", AfficheSet)
 AppeleAsync("https://api.pokemontcg.io/v2/rarities", searchRarelies);
 AppeleAsync("https://api.pokemontcg.io/v2/types", searchTypes);
-*/
+
 
 //AppeleAsync("https://api.pokemontcg.io/v2/cards?q=set.id:base1", AfficheContenairSet)
 //AppeleAsync("https://api.pokemontcg.io/v2/cards/xy7-54", AfficheDetailCard)
