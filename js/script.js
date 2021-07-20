@@ -1,20 +1,23 @@
-AppeleAsync("https://api.pokemontcg.io/v2/sets", AfficheSet)
+/*AppeleAsync("https://api.pokemontcg.io/v2/sets", AfficheSet)
+AppeleAsync("https://api.pokemontcg.io/v2/rarities", searchRarelies);
+AppeleAsync("https://api.pokemontcg.io/v2/types", searchTypes);
+*/
+
 //AppeleAsync("https://api.pokemontcg.io/v2/cards?q=set.id:base1", AfficheContenairSet)
 //AppeleAsync("https://api.pokemontcg.io/v2/cards/xy7-54", AfficheDetailCard)
 //AppeleAsync("https://api.pokemontcg.io/v2/cards?q=name:charizard*", AfficheContenairSet)
 
 //AppeleAsync("https://api.pokemontcg.io/v2/cards?q=rarity:Rare.Shiny.GX types:dragon", AfficheContenairSet)
 
-AppeleAsync("https://api.pokemontcg.io/v2/rarities", searchRarelies);
-AppeleAsync("https://api.pokemontcg.io/v2/types", searchTypes);
 
+disableLoad()
 let id;
 let search = document.getElementById("search");
 let clock;
 let valueRarelie;
 let valueTypes;
 search.addEventListener("input", () => {
-
+	activeLoad()
 	const time = 3000
 	clearTimeout(clock)
 	if (search.value.length != 0) {
@@ -29,7 +32,7 @@ search.addEventListener("input", () => {
 
 let rareties = document.getElementById("rarelies");
 rareties.addEventListener("change", (e) => {
-
+	activeLoad()
 	const time = 3000;
 	clearTimeout(clock)
 	valueRarelie = e.srcElement.value;
@@ -43,7 +46,7 @@ rareties.addEventListener("change", (e) => {
 
 let types = document.getElementById("types");
 types.addEventListener("change", (e) => {
-	
+	activeLoad()
 	const time = 3000
 	clearTimeout(clock)
 	valueTypes = e.srcElement.value;
@@ -56,6 +59,7 @@ types.addEventListener("change", (e) => {
 
 
 function AfficheSearche(data) {
+	disableLoad();
 	document.getElementById('container').innerHTML = ""
 	var container = document.getElementById("container");
 	var row = document.createElement("div");
@@ -75,6 +79,7 @@ function AfficheSearche(data) {
 
 
 function AfficheSet(data) {
+	disableLoad();
 	document.getElementById('container').innerHTML = ""
 	var container = document.getElementById("container");
 	var row = document.createElement("div");
@@ -94,6 +99,7 @@ function AfficheSet(data) {
 }
 
 function AfficheContenairSet(data) {
+	disableLoad();
 	document.getElementById('container').innerHTML = ""
 	var container = document.getElementById("container");
 	var row = document.createElement("div");
@@ -113,7 +119,7 @@ function AfficheContenairSet(data) {
 }
 
 function AfficheDetailCard(data) {
-
+	disableLoad();
 	document.getElementById('container').innerHTML = ""
 	var container = document.getElementById("container");
 	const element = data.data;
@@ -326,3 +332,14 @@ function Async(xhr, callback) {
 	};
 }
 
+function activeLoad(){
+	var loader=document.getElementById("loader");
+	loader.style.display="block";
+	loader.style.position="absolute";
+}
+
+function disableLoad(){
+	var loader=document.getElementById("loader");
+	loader.style.display="none";
+
+}
